@@ -1,17 +1,10 @@
+from io import BytesIO
 
 import streamlit as st
 from PIL import Image, ImageFilter
 
 
-def download_file(image):
-    with open(image, "rb") as file:
-        st.download_button(
-            label="Download",
-            data=file,
-            file_name=image,
-            mime="image/png")
-
-
+# buf = BytesIO()
 with st.expander("Open Camera"):
     camera_image = st.camera_input("Camera")
 
@@ -23,64 +16,49 @@ with st.expander("Open Camera"):
     if camera_image:
         img = Image.open(camera_image)
         if option == "Original":
-            st.image(img)
-            img.save("original_img.png")
-            download_file("original_img.png")
+            image = img
 
         if option == "Gray Scale":
-            gray_image = img.convert("L")
-            st.image(gray_image)
-            gray_image.save("gray_img.png")
-            download_file("gray_img.png")
+            image = img.convert("L")
+
         elif option == "Blur":
-            blur_image = img.filter(ImageFilter.BLUR)
-            st.image(blur_image)
-            blur_image.save("blur_img.png")
-            download_file("blur_img.png")
+            image = img.filter(ImageFilter.BLUR)
+
         elif option == "Contour":
-            contour = img.filter(ImageFilter.CONTOUR)
-            st.image(contour)
-            contour.save("contour_img.png")
-            download_file("contour_img.png")
+            image = img.filter(ImageFilter.CONTOUR)
+
         elif option == "Detail":
-            detail = img.filter(ImageFilter.DETAIL)
-            st.image(detail)
-            detail.save("detail_img.png")
-            download_file("detail_img.png")
+            image = img.filter(ImageFilter.DETAIL)
+
         elif option == "Edge Enhance":
-            edge_enhance = img.filter(ImageFilter.EDGE_ENHANCE)
-            st.image(edge_enhance)
-            edge_enhance.save("edge_enhanced.png")
-            download_file("edge_enhanced.png")
+            image = img.filter(ImageFilter.EDGE_ENHANCE)
+
         elif option == "ore Edge Enhance":
-            more_edge_enhance = img.filter(ImageFilter.EDGE_ENHANCE_MORE)
-            st.image(more_edge_enhance)
-            more_edge_enhance.save("more_edge_enhanced.png")
-            download_file("more_edge_enhanced.png")
+            image = img.filter(ImageFilter.EDGE_ENHANCE_MORE)
+
         elif option == "Emboss":
-            emboss = img.filter(ImageFilter.EMBOSS)
-            st.image(emboss)
-            emboss.save("emboss.png")
-            download_file("emboss.png")
+            image = img.filter(ImageFilter.EMBOSS)
+
         elif option == "Outline":
-            outline = img.filter(ImageFilter.FIND_EDGES)
-            st.image(outline)
-            outline.save("outline.png")
-            download_file("outline.png")
+            image = img.filter(ImageFilter.FIND_EDGES)
+
         elif option == "Sharpen":
-            sharpen = img.filter(ImageFilter.SHARPEN)
-            st.image(sharpen)
-            sharpen.save("sharpen.png")
-            download_file("sharpen.png")
+            image = img.filter(ImageFilter.SHARPEN)
+
         elif option == "Smooth":
-            smooth = img.filter(ImageFilter.SMOOTH)
-            st.image(smooth)
-            smooth.save("smooth.png")
-            download_file("smooth.png")
+            image = img.filter(ImageFilter.SMOOTH)
+
         elif option == "More Smooth":
-            more_smooth = img.filter(ImageFilter.SMOOTH_MORE)
-            st.image(more_smooth)
-            more_smooth.save("more_smooth.png")
-            download_file("more_smooth.png")
+            image = img.filter(ImageFilter.SMOOTH_MORE)
 
+        st.image(image)
+        image.save("image.png")
+        with open("image.png", "rb") as file:
+            st.download_button(label="Download", data=file, file_name="image.png",
+                               mime="image/png")
 
+        # st.image(image)
+        # image.save(buf, format="JPEG")
+        # file = buf.getvalue()
+        # st.download_button(label="Download", data=file, file_name="image.jpeg",
+        #                    mime="image/jpeg")
