@@ -1,8 +1,7 @@
-from io import BytesIO
+# from io import BytesIO
 
 import streamlit as st
 from PIL import Image, ImageFilter
-
 
 # buf = BytesIO()
 with st.expander("Open Camera"):
@@ -54,9 +53,10 @@ with st.expander("Open Camera"):
         st.image(image)
         image.save("image.png")
         with open("image.png", "rb") as file:
-            st.download_button(label="Download", data=file, file_name="image.png",
-                               mime="image/png")
-
+            download = st.download_button(label="Download", data=file, file_name="image.png",
+                                          mime="image/png")
+            if download:
+                st.info("Download Complete")
         # st.image(image)
         # image.save(buf, format="JPEG")
         # file = buf.getvalue()
